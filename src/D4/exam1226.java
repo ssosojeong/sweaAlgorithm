@@ -1,67 +1,69 @@
 package D4;
 
-import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 
-class exam1226{
-    static int[][] map, visit;
-    static int[] startP, endP, di={1,0,-1,0}, dj={0,1,0,-1};
-    static int flag;
+public class exam1226 {
+    static final int TEST_CASE = 10, BOUNDARY = 16;
+    static char[][] map;
+    static int[] di= {0,1,0,-1}, dj= {1,0,-1,0};
+    static int ans, eI, eJ;
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws NumberFormatException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        char[] input;
+        StringBuilder sb = new StringBuilder();
 
-        for(int t=0; t<10; t++){
-            int T = Integer.parseInt(br.readLine());
-            startP = new int[2];
-            endP = new int[2];
-            flag = 0;
+        for(int t=1; t<=TEST_CASE; t++) {
+            int N = Integer.parseInt(br.readLine());
+            ans = 0;
 
-            map = new int[16][16];
-            visit = new int[16][16];
+            int sI=-1, sJ=-1;
+            eI=-1;
+            eJ=-1;
 
-            for(int i=0; i<16; i++){
-                input = br.readLine().toCharArray();
-                for(int j=0; j<16; j++){
-                    int tar = input[j]-'0';
-                    map[i][j] = tar;
-                    if(tar==2) startP =new int[] {i, j};
-                    else if(tar==3) endP =new int[] {i, j};
+            map = new char[BOUNDARY][BOUNDARY];
+            for(int i=0; i<BOUNDARY; i++) {
+                map[i] = br.readLine().toCharArray();
+                for(int j=0; j<BOUNDARY; j++) {
+                    if(map[i][j]=='0' || map[i][j]=='1') {
+                        continue;
+                    }else if(map[i][j]=='2') {				//시작점
+                        sI = i;
+                        sJ = j;
+                    } else if(map[i][j]=='3') {				//도착점
+                        eI = i;
+                        eJ = j;
+                    }
                 }
             }
-            dfs(startP[0], startP[1]);
 
-            System.out.printf("#%d %d%n", T, flag);
+            dfs(sI,sJ);
 
+            sb.append("#"+N+" "+ans+"\n");
         }
+        System.out.println(sb);
 
 
 
     }
 
-    static void dfs(int i, int j){
-        if(i==endP[0] && j==endP[1]){
-            flag = 1;
-            return;
-        } else{
-            for(int d=0; d<4; d++){
-                int newI = i + di[d];
-                int newJ = j + dj[d];
+    public static void dfs(int i, int j) {
+        if(i==eI && j==eJ) {
+            ans = 1;
+        } else {
+            for(int d=0; d<4; d++) {
+                int newI = i+di[d];
+                int newJ = j+dj[d];
 
-                if(newI<0 || newI>15 || newJ<0 || newJ>15 || map[newI][newJ] == 1 || visit[newI][newJ]==1)  continue;
+                if(newI<0 || newI>=BOUNDARY || newJ<0 || newJ>=BOUNDARY || map[newI][newJ]=='1' || map[newI][newJ]=='v') {
+                    continue;
+                }
 
-                visit[newI][newJ] = 1;
+                map[newI][newJ]='v';
                 dfs(newI, newJ);
-                visit[newI][newJ] = 0;
             }
-
         }
-
     }
-
-
-
 
 }
