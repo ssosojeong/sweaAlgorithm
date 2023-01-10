@@ -24,7 +24,7 @@ public class exam1244 {
 			int N = Integer.parseInt(st.nextToken());
 			
 			while(N-->0) {
-				int x = numbers[0N];
+				int x = numbers[0];
 				int max = -1, idx=0;
 				
 				//제일 큰 수 찾기
